@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 style="font-size:20px; font-weight:900; margin:0;">أمر شغل جديد</h2>
+        <p style="font-size:13px; color:#64748b; margin:4px 0 0;">تسجيل بيانات السيارة والعميل وأعمال الصيانة</p>
+    </div>
+    <a href="{% url 'workorder_list' %}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i class="fas fa-arrow-right"></i> رجوع
+    </a>
+</div>
+
+<form method="post" id="workorderForm">
+    {% csrf_token %}
+
+    <div class="row g-4">
+        <!-- بيانات العميل -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center gap-2" style="background:#3b82f6; color:#fff;">
+                    <i class="fas fa-user"></i>
+                    <span>بيانات العميل</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">{{ customer_form.name.label }}</label>
+                            {{ customer_form.name }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ customer_form.phone.label }}</label>
+                            {{ customer_form.phone }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ customer_form.job.label }}</label>
+                            {{ customer_form.job }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ customer_form.address.label }}</label>
+                            {{ customer_form.address }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بيانات السيارة -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center gap-2" style="background:#22c55e; color:#fff;">
+                    <i class="fas fa-car"></i>
+                    <span>بيانات السيارة</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">{{ car_form.license_plate.label }}</label>
+                            {{ car_form.license_plate }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">{{ car_form.car_type.label }}</label>
+                            {{ car_form.car_type }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">{{ car_form.manufacture_year.label }}</label>
+                            {{ car_form.manufacture_year }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">{{ car_form.odometer_reading.label }}</label>
+                            {{ car_form.odometer_reading }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ car_form.chassis_number.label }}</label>
+                            {{ car_form.chassis_number }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ car_form.engine_number.label }}</label>
+                            {{ car_form.engine_number }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ car_form.date.label }}</label>
+                            {{ car_form.date }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ car_form.defects.label }}</label>
+                            {{ car_form.defects }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ car_form.notes.label }}</label>
+                            {{ car_form.notes }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بيانات أمر الشغل -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center gap-2" style="background:#f59e0b; color:#fff;">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>بيانات أمر الشغل</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ workorder_form.technician.label }}</label>
+                            {{ workorder_form.technician }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ workorder_form.status.label }}</label>
+                            {{ workorder_form.status }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ workorder_form.defects.label }}</label>
+                            {{ workorder_form.defects }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قطع الغيار -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header d-flex align-items-center justify-content-between" style="background:#1a2332; color:#fff;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-cogs"></i>
+                        <span>قطع الغيار</span>
+                    </div>
+                    <button type="button" class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:#fff; font-size:12px;" data-bs-toggle="modal" data-bs-target="#spareModal">
+                        <i class="fas fa-plus"></i> إضافة
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm mb-0" id="sparePartsTable" style="font-size:13px;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>القطعة</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th><th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr style="background:#f8fafc;">
+                                    <td colspan="3" class="text-end fw-bold" style="font-size:13px;">إجمالي قطع الغيار:</td>
+                                    <td id="totalSpare" style="font-weight:700; color:#16a34a;">0.00</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المصنعيات -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header d-flex align-items-center justify-content-between" style="background:#1a2332; color:#fff;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-hand-tools"></i>
+                        <span>المصنعيات (أجور)</span>
+                    </div>
+                    <button type="button" class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:#fff; font-size:12px;" data-bs-toggle="modal" data-bs-target="#laborModal">
+                        <i class="fas fa-plus"></i> إضافة
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm mb-0" id="laborTable" style="font-size:13px;">
+                            <thead class="table-light">
+                                <tr><th>الوصف</th><th>المبلغ</th><th></th></tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr style="background:#f8fafc;">
+                                    <td class="text-end fw-bold" style="font-size:13px;">إجمالي المصنعيات:</td>
+                                    <td id="totalLabor" style="font-weight:700; color:#16a34a;">0.00</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inputs hidden -->
+        <input type="hidden" name="spare_parts_data" id="spare_parts_data">
+        <input type="hidden" name="labor_items_data" id="labor_items_data">
+
+        <!-- Actions -->
+        <div class="col-12">
+            <div class="d-flex justify-content-end gap-3">
+                <a href="{% url 'workorder_list' %}" class="btn btn-outline-secondary px-4">إلغاء</a>
+                <button type="submit" class="btn btn-success px-5">
+                    <i class="fas fa-save"></i> حفظ أمر الشغل
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal: قطعة غيار -->
+<div class="modal fade" id="spareModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header" style="background:#1a2332; color:#fff; border-radius:16px 16px 0 0;">
+                <h5 class="modal-title" style="font-size:15px;"><i class="fas fa-cogs me-2"></i>إضافة قطعة غيار</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label">اسم القطعة</label>
+                    <input type="text" class="form-control" id="spareName" placeholder="مثال: فلتر زيت">
+                </div>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="form-label">الكمية</label>
+                        <input type="number" class="form-control" id="spareQty" value="1" min="1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">سعر الوحدة</label>
+                        <input type="number" class="form-control" id="sparePrice" value="0" step="0.01">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #e2e8f0;">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary px-4" id="addSpareBtn">إضافة</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: مصنعية -->
+<div class="modal fade" id="laborModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header" style="background:#1a2332; color:#fff; border-radius:16px 16px 0 0;">
+                <h5 class="modal-title" style="font-size:15px;"><i class="fas fa-wrench me-2"></i>إضافة صنف مصنعية</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label">الوصف</label>
+                    <input type="text" class="form-control" id="laborDesc" placeholder="مثال: تغيير زيت، فحص محرك">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">المبلغ</label>
+                    <input type="number" class="form-control" id="laborAmount" value="0" step="0.01">
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #e2e8f0;">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary px-4" id="addLaborBtn">إضافة</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('addSpareBtn').addEventListener('click', function() {
+        const name = document.getElementById('spareName').value.trim();
+        const qty = parseInt(document.getElementById('spareQty').value) || 1;
+        const price = parseFloat(document.getElementById('sparePrice').value) || 0;
+        if (!name) { alert('الرجاء إدخال اسم القطعة'); return; }
+        addSpareRow(name, qty, price);
+        bootstrap.Modal.getInstance(document.getElementById('spareModal')).hide();
+        document.getElementById('spareName').value = '';
+        document.getElementById('spareQty').value = 1;
+        document.getElementById('sparePrice').value = 0;
+    });
+
+    document.getElementById('addLaborBtn').addEventListener('click', function() {
+        const desc = document.getElementById('laborDesc').value.trim();
+        const amount = parseFloat(document.getElementById('laborAmount').value) || 0;
+        if (!desc) { alert('الرجاء إدخال وصف للمصنعية'); return; }
+        addLaborRow(desc, amount);
+        bootstrap.Modal.getInstance(document.getElementById('laborModal')).hide();
+        document.getElementById('laborDesc').value = '';
+        document.getElementById('laborAmount').value = 0;
+    });
+
+    function addSpareRow(name, qty, price) {
+        const tbody = document.querySelector('#sparePartsTable tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${escapeHtml(name)}</td><td>${qty}</td><td>${price.toFixed(2)}</td>
+            <td class="part-total">${(qty*price).toFixed(2)}</td>
+            <td><button type="button" class="btn btn-outline-danger btn-sm py-0 px-2" onclick="this.closest('tr').remove();updateTotals();"><i class="fas fa-times"></i></button></td>`;
+        tbody.appendChild(row);
+        updateTotals();
+    }
+
+    function addLaborRow(desc, amount) {
+        const tbody = document.querySelector('#laborTable tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${escapeHtml(desc)}</td>
+            <td class="labor-amount">${amount.toFixed(2)}</td>
+            <td><button type="button" class="btn btn-outline-danger btn-sm py-0 px-2" onclick="this.closest('tr').remove();updateTotals();"><i class="fas fa-times"></i></button></td>`;
+        tbody.appendChild(row);
+        updateTotals();
+    }
+
+    function updateTotals() {
+        let ts = 0;
+        document.querySelectorAll('#sparePartsTable tbody tr').forEach(r => {
+            ts += (parseFloat(r.cells[1]?.innerText)||0) * (parseFloat(r.cells[2]?.innerText)||0);
+        });
+        document.getElementById('totalSpare').innerText = ts.toFixed(2);
+
+        let tl = 0;
+        document.querySelectorAll('#laborTable tbody tr').forEach(r => {
+            tl += parseFloat(r.querySelector('.labor-amount')?.innerText)||0;
+        });
+        document.getElementById('totalLabor').innerText = tl.toFixed(2);
+    }
+
+    function escapeHtml(s) {
+        return (s||'').replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+    }
+
+    document.getElementById('workorderForm').addEventListener('submit', function() {
+        const spare = [];
+        document.querySelectorAll('#sparePartsTable tbody tr').forEach(r => {
+            const n = r.cells[0]?.innerText||'';
+            if (n) spare.push({ name:n, quantity:parseInt(r.cells[1]?.innerText)||0, price:parseFloat(r.cells[2]?.innerText)||0 });
+        });
+        const labor = [];
+        document.querySelectorAll('#laborTable tbody tr').forEach(r => {
+            const d = r.cells[0]?.innerText||'';
+            if (d) labor.push({ description:d, amount:parseFloat(r.querySelector('.labor-amount')?.innerText)||0 });
+        });
+        document.getElementById('spare_parts_data').value = JSON.stringify(spare);
+        document.getElementById('labor_items_data').value = JSON.stringify(labor);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 style="font-size:20px; font-weight:900; margin:0;">أوامر الشغل</h2>
+        <p style="font-size:13px; color:#64748b; margin:4px 0 0;">إدارة ومتابعة جميع أوامر الصيانة</p>
+    </div>
+    <a href="{% url 'create_workorder' %}" class="btn btn-primary d-flex align-items-center gap-2">
+        <i class="fas fa-plus"></i> تسجيل أمر شغل جديد
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center gap-2" style="background:#f59e0b; color:#fff;">
+        <i class="fas fa-clipboard-list"></i>
+        <span>قائمة أوامر الشغل</span>
+    </div>
+    <div class="card-body">
+        <p class="text-muted" style="font-size:14px;">جميع أوامر الصيانة ستظهر هنا.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 style="font-size:20px; font-weight:900; margin:0;">الفواتير</h2>
+        <p style="font-size:13px; color:#64748b; margin:4px 0 0;">سجل الفواتير الصادرة</p>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+        <div class="card border-0 shadow-sm px-4 py-2" style="background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; border-radius:12px;">
+            <div style="font-size:12px; opacity:0.85;">إجمالي الإيرادات</div>
+            <div style="font-size:20px; font-weight:900;">{{ total_revenue|floatformat:2 }} <small style="font-size:13px;">جنيه</small></div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center gap-2" style="background:#3b82f6; color:#fff;">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>جميع الفواتير</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0" style="font-size:14px;">
+                <thead class="table-light">
+                    <tr>
+                        <th>رقم الفاتورة</th>
+                        <th>التاريخ</th>
+                        <th>العميل</th>
+                        <th>السيارة</th>
+                        <th>المصنعيات</th>
+                        <th>قطع الغيار</th>
+                        <th>الخامات</th>
+                        <th>الخصم (%)</th>
+                        <th>الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in invoices %}
+                    <tr>
+                        <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-size:13px; font-weight:700;">#{{ inv.invoice_number }}</span></td>
+                        <td>{{ inv.date }}</td>
+                        <td>{{ inv.work_order.customer.name }}</td>
+                        <td><span class="badge bg-secondary">{{ inv.work_order.car.license_plate }}</span></td>
+                        <td>{{ inv.labor_costs }}</td>
+                        <td>{{ inv.spare_parts }}</td>
+                        <td>{{ inv.materials }}</td>
+                        <td>{% if inv.discount_percent > 0 %}<span class="badge bg-warning text-dark">{{ inv.discount_percent }}%</span>{% else %}—{% endif %}</td>
+                        <td><strong style="color:#16a34a;">{{ inv.total_after_discount|floatformat:2 }}</strong></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted py-4" style="font-size:14px;">
+                            <i class="fas fa-file-invoice fa-2x mb-2 d-block opacity-25"></i>
+                            لا توجد فواتير حتى الآن
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

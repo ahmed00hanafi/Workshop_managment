@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 style="font-size:20px; font-weight:900; margin:0;">الفنيين</h2>
+        <p style="font-size:13px; color:#64748b; margin:4px 0 0;">بيانات فنيي المركز</p>
+    </div>
+    <button class="btn d-flex align-items-center gap-2" style="background:#0ea5e9; color:#fff;">
+        <i class="fas fa-user-plus"></i> إضافة فني
+    </button>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center gap-2" style="background:#0ea5e9; color:#fff;">
+        <i class="fas fa-wrench"></i>
+        <span>فريق الفنيين</span>
+    </div>
+    <div class="card-body">
+        <p class="text-muted" style="font-size:14px;">بيانات الفنيين العاملين في المركز ستظهر هنا.</p>
+    </div>
+</div>
+{% endblock %}

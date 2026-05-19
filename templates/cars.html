@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 style="font-size:20px; font-weight:900; margin:0;">السيارات</h2>
+        <p style="font-size:13px; color:#64748b; margin:4px 0 0;">سجل السيارات المسجلة في النظام</p>
+    </div>
+    <button class="btn btn-success d-flex align-items-center gap-2">
+        <i class="fas fa-plus"></i> إضافة سيارة
+    </button>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center gap-2" style="background:#22c55e; color:#fff;">
+        <i class="fas fa-car"></i>
+        <span>قائمة السيارات</span>
+    </div>
+    <div class="card-body">
+        <p class="text-muted" style="font-size:14px;">قائمة السيارات المسجلة ستظهر هنا قريباً.</p>
+    </div>
+</div>
+{% endblock %}
