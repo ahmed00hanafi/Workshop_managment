@@ -11,10 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-it'
 
 # وضع التصحيح (Debug)
-DEBUG = True
+DEBUG = False
 
 # النطاقات المسموحة
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # التطبيقات المثبتة
 INSTALLED_APPS = [
@@ -101,3 +101,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # النوع الافتراضي للمفتاح الأساسي
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_ROOT = BASE_DIR / "staticfiles"
